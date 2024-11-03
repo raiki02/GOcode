@@ -44,7 +44,7 @@ func encoding(r *http.Response) {
 }
 
 func main() {
-	r, _ := http.Get("https://baidu.com")
+	r, _ := http.Get("https://www.bilibili.com/")
 	defer func() { _ = r.Body.Close() }()
 
 	body(r)
