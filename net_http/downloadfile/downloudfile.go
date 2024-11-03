@@ -46,7 +46,10 @@ func downloadProcess(url, filename string) {
 }
 
 func main() {
-	url := "https://th.bing.com/th?id=OIP.GsHAeJ5pOxB6vQ1OVoC7LgHaHa&w=80&h=80&c=1&vt=10&bgcl=3f5cca&r=0&o=6&dpr=1.5&pid=5.1"
-	filename := "acg.png2"
+	var url, filename string
+	//downloadProcess(url, filename)
+	fmt.Print("下载网址, 存储文件名:")
+	fmt.Scanln(&url, &filename)
+
 	downloadProcess(url, filename)
 }

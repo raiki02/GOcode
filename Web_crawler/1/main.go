@@ -72,7 +72,7 @@ func main() {
 	// 提取所有链接
 	links := extractLinks(doc, baseURL)
 	fmt.Println("页面中的链接：")
-	for _, link := range links {
-		fmt.Println(link)
+	for v, link := range links {
+		fmt.Println(v, link)
 	}
 }

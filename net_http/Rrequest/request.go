@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	//"net/http"
+	"net/http"
 	"net/url"
 )
 
@@ -12,7 +12,6 @@ func printContent(resp *http.Response) {
 	content, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(content))
 }
-
 func requestByParams() {
 	request, _ := http.NewRequest(http.MethodGet, "http://httpbin.org/get", nil)
 
