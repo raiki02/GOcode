@@ -1,45 +1,65 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"net/url"
 
-	"github.com/PuerKitBio/goquery"
+	"golang.org/x/net/html"
 )
 
 func main() {
-	spider()
-}
 
-func spider() {
-	client := &http.Client{}
-	req, err := http.NewRequest(
-		http.MethodGet,
-		"https://movie.douban.com/top250",
-		nil,
-	)
-	if err != nil {
-		panic(err)
-	req.Header.Set("referer", "https://www.bing.com/")  
-	
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0")
-	req.Header.Set("cache-control", "max-age=0")
-	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
-	req.Header.Set("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6")
-	req.Header.Set("Sec-Ch-Ua-Mobile", "?0")
-	req.Header.Set("sec-fetch-dest", "document")
-	req.Header.Set("sec-fetch-mode", "navigate")
-	req.Header.Set("sec-fetch-site", "cross-site")
-	req.Header.Set("sec-fetch-user", "?1")
-	req.Header.Set("upgrade-insecure-requests", "1")
-
-	resp, err := client.Do(req)
+	Turl := "https://cn.bing.com/"
+	resp, err := http.Get(Turl)
 	if err != nil {
 		panic(err)
 	}
+	if resp.StatusCode != http.StatusOK {
+		fmt.Println("err", resp.Status, resp.StatusCode)
+	}
+	defer resp.Body.Close()
 
-	defer func() { _ = resp.Body.Close() }()
+	// fmt.Println("resp = ", resp)
+	// fmt.Println("resp.ContentLength", resp.ContentLength)
+	// println("resp.Header", resp.Header)
+	// println("resp.Proto", resp.Proto)
+	// println("resp.Request", resp.Request)
+	// println("resp.TLS", resp.TLS)
+	// println("resp.Trailer", resp.Trailer)
+	//fmt.Println("resp.Body = ", resp.Body)
 
+	docs, err := html.Parse(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	//fmt.Println("docs = ", docs)
+
+	baseURL, err := url.Parse(Turl)
+	if err != nil {
+		panic(err)
+
+	}
+	var links []string
+	var f func(*html.Node)
+	f = func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "a" {
+			for _, attr := range n.Attr {
+				if attr.Key == "href" {
+					link, err := baseURL.Parse(attr.Val)
+					if err == nil {
+						links = append(links, link.String())
+					}
+				}
+			}
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			f(c)
+		}
+	}
+	f(docs)
+
+	for v, link := range links {
+		fmt.Println(v, link)
+	}
 }
-
-
-v := make(map[string]string)
