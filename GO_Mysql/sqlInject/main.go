@@ -37,6 +37,7 @@ func sqlInject(name string) {
 	sqlStr := fmt.Sprintf("select id, name, age from user where name='%s'", name)
 	fmt.Println("sql = ", sqlStr)
 	var u user
+	//sql =  select id, name, age from user where name='xxx' union select * from user #'
 	ret, err := db.Query(sqlStr)
 	if err != nil {
 		panic(err)
