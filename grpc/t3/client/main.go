@@ -3,18 +3,20 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "t3/proto"
-
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	pb "t3/proto"
 )
 
 func main() {
-	conn, _ := grpc.Dial("127.0.0.1:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	//连接
+	conn, _ := grpc.NewClient("127.0.0.1:8080")
 	defer conn.Close()
+	//实例化
+	client := pb.NewUserInfoServiceClient(conn)
+	req := &pb.UserRequest{
+		Name: "raiki",
+	}
+	res, _ := client.GetUserInfo(context.Background(), req)
+	fmt.Println(res)
 
-	client := pb.NewNihaoClient(conn)
-
-	res, _ := client.Nihao(context.Background(), &pb.NihaoRequest{RequestName: "aaasdf"})
-	fmt.Println(res.GetResponseMsg())
 }
