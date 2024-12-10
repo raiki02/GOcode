@@ -7,11 +7,6 @@ import (
 	"loagent/kafka"
 )
 
-var (
-	tailObj *tail.Tail
-	LogChan chan string
-)
-
 type TailTask struct {
 	path       string
 	topic      string
@@ -56,46 +51,7 @@ func (t *TailTask) run() {
 			fmt.Printf("tail task: %s_%s done", t.path, t.topic)
 			return
 		case line := <-t.instance.Lines:
-			//kafka.SendToKafka(t.topic, line.Text)
 			kafka.SendToChan(t.topic, line.Text)
 		}
 	}
-}
-
-//---------------------------------------------------
-
-func (t *TailTask) ReadChan() <-chan *tail.Line {
-	return t.instance.Lines
-}
-
-func ReadLog() {
-	var (
-		line *tail.Line
-		ok   bool
-	)
-	for {
-		line, ok = <-tailObj.Lines
-		if !ok {
-			fmt.Println("tail file close reopen, filename:%s\n", tailObj.Filename)
-			continue
-		}
-		fmt.Println("msg:", line.Text)
-	}
-}
-
-func Init0(filename string) (err error) {
-	config := tail.Config{
-		ReOpen:    true,
-		MustExist: false,
-		Poll:      true,
-		Follow:    true,
-		Location:  &tail.SeekInfo{Offset: 0, Whence: 2},
-	}
-
-	tailObj, err = tail.TailFile(filename, config)
-
-	if err != nil {
-		panic(err)
-	}
-	return
 }

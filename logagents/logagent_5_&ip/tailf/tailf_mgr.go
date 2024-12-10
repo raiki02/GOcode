@@ -14,18 +14,20 @@ type tailLogMgr struct {
 	newConfChan chan []*etcd.LogEntry
 }
 
+// 传入所有
 func Init(logEntryConf []*etcd.LogEntry) {
 	tskMgr = &tailLogMgr{
 		logEntry:    logEntryConf,
 		tskMap:      make(map[string]*TailTask, 16),
 		newConfChan: make(chan []*etcd.LogEntry),
 	}
-
+	//对每个操作
 	for _, logEntry := range logEntryConf {
 		tailObj := NewTailTask(logEntry.Path, logEntry.Topic)
 		mk := fmt.Sprintf("%s_%s", logEntry.Path, logEntry.Topic)
 		tskMgr.tskMap[mk] = tailObj
 	}
+	//检测增减配置
 	go tskMgr.run()
 }
 

@@ -4,6 +4,7 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$USER_HOME$/Desktop/`/PROGRAMS/muxiwork" vcs="Git" />
     <mapping directory="$USER_HOME$/Desktop/`/PROGRAMS/muxiwork/week4/http-theft-bank-SUIYUELIANYI" vcs="Git" />
+    <mapping directory="$USER_HOME$/Desktop/`/PROGRAMS/muxiwork/week8/muxi_auth_service_v2" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/gRPC/t0/grpc-go" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../../../../Projects/HowToCook" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../../../../Projects/Imitatation" vcs="Git" />
