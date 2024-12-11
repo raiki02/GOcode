@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	conn, err := net.Dial("tcp", "127.0.0.1:20000")
+	conn, err := net.Dial("tcp", "127.0.0.1:8080")
 	if err != nil {
 		fmt.Println("err :", err)
 		return
@@ -30,7 +30,6 @@ func main() {
 		n, err := conn.Read(buf[:])
 		if err != nil {
 			fmt.Println("recv failed, err:", err)
-			return
 		}
 		fmt.Println(string(buf[:n]))
 	}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package t4_proto;
+
+option go_package = "./;pb_4";
+
+message TestRqt {
+    string name = 1;
+}
+
+message TestRsp {
+    string info = 1;
+}
+
+service Testfuwu {
+  rpc Tceshi (TestRqt) returns (TestRsp) {}
+}
+
+
